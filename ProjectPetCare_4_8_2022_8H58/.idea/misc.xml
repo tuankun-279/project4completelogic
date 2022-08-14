@@ -20,6 +20,7 @@
         <entry key="..\:/Project4/Booking/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_item.xml" value="0.3625" />
         <entry key="..\:/Project4/Booking/ProjectPetCare_4_8_2022_8H58/app/src/main/res/menu/bottom_nav_menu.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/drawable/bg_gray_corner_16.xml" value="0.2465" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/drawable/bg_white_corner_10_border_gray.xml" value="0.1445" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/drawable/bg_yellow_corner_10.xml" value="0.1945" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/drawable/bottom_background.xml" value="0.236" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/drawable/header_background.xml" value="0.236" />
@@ -27,26 +28,40 @@
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/drawable/log_reg_btn.xml" value="0.2465" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/hello/drawable/ic_baseline_email_24.xml" value="0.2465" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_booking.xml" value="0.18541666666666667" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_booking_history.xml" value="0.22" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_category.xml" value="0.3625" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_custom_list_view.xml" value="0.33" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_forgot_password.xml" value="0.18645833333333334" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_image_pet.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_login.xml" value="0.33" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_main.xml" value="0.3625" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_pet.xml" value="0.2" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_pet_delete.xml" value="0.1" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_pet_update.xml" value="0.1859375" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_register.xml" value="0.5" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_service.xml" value="0.1" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_service_delete.xml" value="0.1" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_user_delete.xml" value="0.1" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/activity_user_update.xml" value="0.1" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/booking_histories_item.xml" value="0.45" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/booking_history_list_item.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/booking_list_item.xml" value="0.25" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/booking_services_item.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/fragment_setting.xml" value="0.1" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/item_photos.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_about_us.xml" value="0.3625" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_dialog_booking.xml" value="0.19444444444444445" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_dialog_display_images.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_dialog_on_time.xml" value="0.2" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_dialog_request.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_drop_down.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_forgot_pass.xml" value="0.3484375" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_forgotpass.xml" value="1.0" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_item.xml" value="0.1" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_navigation.xml" value="0.28160919540229884" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_navigation_header.xml" value="0.22" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_recive_dialog.xml" value="0.33" />
+        <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/layout_selected_dropdown.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/photos_display_item.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/layout/toolbar_pet_uploading_image.xml" value="0.2" />
         <entry key="..\:/ProjectPetCare_4_8_2022_8H58/app/src/main/res/menu/image_pet_menu.xml" value="0.2" />
@@ -98,6 +113,7 @@
       </map>
     </option>
   </component>
+  <component name="ExternalStorageConfigurationManager" enabled="true" />
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="Android Studio default JDK" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

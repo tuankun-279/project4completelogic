@@ -4,36 +4,56 @@
 
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
-    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
+    <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE" />
+
     <application
-        android:hardwareAccelerated="false"
         android:name=".AlarmReceiver"
         android:allowBackup="true"
+        android:hardwareAccelerated="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.ProjectPetCare">
+        <activity
+            android:name=".activities.User.UserDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.User.UserUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Category.CategoryActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Service.ServiceDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Service.ServiceActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Pet.PetDeleteActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Pet.PetUpdateActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.Pet.PetActivity"
+            android:exported="false" />
+        <activity
+            android:name=".activities.BookingHistoryActivity"
+            android:exported="false" />
+
         <service
             android:name=".AlarmService"
             android:enabled="true"
-            android:exported="true"></service>
-        <activity
-            android:name=".activities.ServiceActivity"
-            android:exported="false" />
+            android:exported="true" />
+
         <activity
             android:name=".activities.BookingActivity"
-            android:exported="false">
-
-        </activity>
-        <activity
-            android:name=".activities.PetActivity"
             android:exported="false" />
         <activity
             android:name=".activities.LoginActivity"
-            android:exported="false">
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".OTP.SendOTPActivity"
             android:exported="false" />
@@ -54,22 +74,17 @@
             android:exported="false" />
         <activity
             android:name=".activities.RegisterActivity"
-            android:exported="false" >
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activities.ReminderActivity"
-            android:exported="false" >
-
-        </activity>
+            android:exported="false" />
         <activity
             android:name=".activities.AddReminderActivity"
             android:exported="false" />
         <activity
             android:name=".activities.ImagePetActivity"
-            android:exported="false" >
+            android:exported="false" />
 
-        </activity>
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />

@@ -2,6 +2,7 @@ package tuan.aprotrain.projectpetcare.activities;
 
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -14,6 +15,7 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.RequiresApi;
 import androidx.appcompat.widget.Toolbar;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -22,6 +24,8 @@ import androidx.core.view.MenuItemCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -50,7 +54,7 @@ public class BreedingActivity extends AppCompatActivity {
     LinearLayout ckAdditionalSearchSpinner;
     LinearLayout showoHideButtonFilter;
 
-    private DatabaseReference reference ;
+    private DatabaseReference reference;
 
     private ArrayList<Pet> petList;
     private ArrayList<Pet> petListSelected = new ArrayList<>();
@@ -100,14 +104,18 @@ public class BreedingActivity extends AppCompatActivity {
 
 //        FirebaseDatabase database = FirebaseDatabase.getInstance();
 //        DatabaseReference databaseReference = database.getReference("Pet");
-//
+
+        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
         reference.child("Pets").addValueEventListener(new ValueEventListener() {
+            @RequiresApi(api = Build.VERSION_CODES.N)
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for(DataSnapshot dataSnapshot: snapshot.getChildren()){
-                    Pet pet = dataSnapshot.getValue(Pet.class);
-                    petList.add(pet);
-                }
+                snapshot.getChildren().forEach(petSnapshot -> {
+                    if (!petSnapshot.getValue(Pet.class).getUserId().equals(user.getUid())) {
+                        Pet pet = petSnapshot.getValue(Pet.class);
+                        petList.add(pet);
+                    }
+                });
                 petAdapter.notifyDataSetChanged();
             }
 
@@ -373,6 +381,7 @@ public class BreedingActivity extends AppCompatActivity {
             petAdapter.setFilteredList(filteredPet);
         }
     }
+
     // search by color
     public void colorFilter(String searchText) {
 

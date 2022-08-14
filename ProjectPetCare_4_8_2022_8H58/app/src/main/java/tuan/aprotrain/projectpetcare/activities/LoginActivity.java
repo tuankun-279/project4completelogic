@@ -51,6 +51,7 @@ import com.google.firebase.messaging.FirebaseMessaging;
 
 import java.util.regex.Pattern;
 
+import tuan.aprotrain.projectpetcare.OTP.SendOTPActivity;
 import tuan.aprotrain.projectpetcare.R;
 import tuan.aprotrain.projectpetcare.entity.Recycle;
 import tuan.aprotrain.projectpetcare.entity.User;
@@ -99,8 +100,10 @@ public class LoginActivity extends AppCompatActivity {
         forgot_pass = findViewById(R.id.forgot_pass);
         inputLayoutEmail = findViewById(R.id.texInputLayoutEmail);
         inputLayoutPass = findViewById(R.id.texInputLayoutPass);
-        ImageView imageViewGoogle = findViewById(R.id.imageView2);
+        ImageView imageViewGoogle = findViewById(R.id.googleBtn);
+        ImageView phoneBtn = findViewById(R.id.phoneBtn);
 
+        reference = FirebaseDatabase.getInstance().getReference().child(User.TABLE_NAME);
 
 
 
@@ -191,20 +194,23 @@ public class LoginActivity extends AppCompatActivity {
                 startActivity(new Intent(LoginActivity.this, RegisterActivity.class));
             }
         });
+        phoneBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                startActivity(new Intent(LoginActivity.this, SendOTPActivity.class));
+            }
+        });
     }
 
     public boolean Verify(String email, String password) {
         int i = 0;
         if (TextUtils.isEmpty(email)) {
-
             i++;
         }
         if (!Patterns.EMAIL_ADDRESS.matcher(email).matches()) {
-
             i++;
         }
         if (TextUtils.isEmpty(password)) {
-
             i++;
         }
         if (i > 0) {
@@ -217,7 +223,7 @@ public class LoginActivity extends AppCompatActivity {
 
     //public boolean i = false;
     public void login(String email, String password) {
-        reference = FirebaseDatabase.getInstance().getReference().child(User.TABLE_NAME);
+
 
         //recycle = new Recycle();
         mAuth.signInWithEmailAndPassword(email, password)
@@ -232,7 +238,8 @@ public class LoginActivity extends AppCompatActivity {
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     switch (snapshot.child("userRole").getValue(String.class)) {
                                         case "user":
-                                            startActivity(new Intent(LoginActivity.this, MainActivity.class));
+                                            startActivity(new Intent(LoginActivity.this, BookingHistoryActivity.class));
+                                            //startActivity(new Intent(LoginActivity.this, MainActivity.class));
                                             break;
                                         case "admin":
                                             //startActivity(new Intent(LoginActivity.this, MainActivity.class));
@@ -240,10 +247,10 @@ public class LoginActivity extends AppCompatActivity {
                                         default:
                                             break;
                                     }
-                                    if (snapshot.child("userRole").getValue(String.class).equals("user")) {
-
-                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
-                                    }
+//                                    if (snapshot.child("userRole").getValue(String.class).equals("user")) {
+//
+//                                        startActivity(new Intent(LoginActivity.this, MainActivity.class));
+//                                    }
                                 }
 
                                 @Override
@@ -277,7 +284,7 @@ public class LoginActivity extends AppCompatActivity {
     }
 
     private FirebaseAuth auth;
-    Activity activity;
+
 
     private void OpenForgotPassword(int gravity) {
         final Dialog dialog = new Dialog(LoginActivity.this);
@@ -347,7 +354,6 @@ public class LoginActivity extends AppCompatActivity {
     public void signInGoogle(){
         Intent signInIntent = gsc.getSignInIntent();
         startActivityForResult(signInIntent,RC_SIGN_IN);
-
     }
 
     @Override
@@ -362,7 +368,7 @@ public class LoginActivity extends AppCompatActivity {
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
                 // ...
-                Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Error: "+e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }
     }
@@ -375,18 +381,15 @@ public class LoginActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            FirebaseUser userAuth = mAuth.getCurrentUser();
+                            User user = new User(userAuth.getUid(),userAuth.getEmail(),"user");
+                            reference.child(userAuth.getUid()).setValue(user);
                             Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                             startActivity(intent);
-
                         } else {
                             Toast.makeText(LoginActivity.this, "Sorry auth failed.", Toast.LENGTH_SHORT).show();
-
-
                         }
-
-
-                        // ...
                     }
                 });
     }

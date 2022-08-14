@@ -87,7 +87,7 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
 //        });
         GoogleSignInAccount signInAccount = GoogleSignIn.getLastSignedInAccount(this);
         if (signInAccount !=null){
-            textView4.setText(signInAccount.getEmail());
+                textView4.setText(signInAccount.getEmail());
         }
 
 

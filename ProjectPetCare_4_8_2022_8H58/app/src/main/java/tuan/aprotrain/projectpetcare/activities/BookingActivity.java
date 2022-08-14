@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CheckBox;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ExpandableListView;
@@ -65,6 +64,7 @@ import tuan.aprotrain.projectpetcare.entity.Recycle;
 import tuan.aprotrain.projectpetcare.entity.Service;
 
 public class BookingActivity extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
+    TextView nameService;
     /*
       Phần khai báo cho adapter category
        */
@@ -94,10 +94,13 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
     String startDate;
     TextView dateStart, dateEnd;
     private Boolean chooseDateStart = true;
-    Button btnSubmit;
+    TextView btnSubmit;
     Recycle recycle;
     String idButton;
     String category;
+    private Boolean isUpdating = false;
+
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -109,6 +112,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         notePet = findViewById(R.id.notePet);
 
         idButton = getIntent().getStringExtra("ID_BUTTON");
+        nameService = findViewById(R.id.textServiceInfo);
 
         spinnerPetName = findViewById(R.id.spnPetName);
         ArrayAdapter<String> petNameAdapter = new ArrayAdapter<>(BookingActivity.this, androidx.appcompat.R.layout.support_simple_spinner_dropdown_item, getListPetName());
@@ -134,6 +138,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         prepareListData();
         listAdapter = new ExpandLVCheckBox(this, listCategory, listService);
         expListView.setAdapter(listAdapter);
+        recycle = new Recycle();
 
         dateStart = findViewById(R.id.appointment);
         dateEnd = findViewById(R.id.endDateHotel);
@@ -198,7 +203,6 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
 
 
         btnSubmit = findViewById(R.id.btnSubmit);
-        final TextView textView = (TextView) findViewById(R.id.price);
 
 
         btnSubmit.setOnClickListener(new View.OnClickListener() {
@@ -264,40 +268,41 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
                 for (Service service : getCheckedService()) {
                     serviceTime += service.getServiceTime();
                 }
-                Recycle recycle = new Recycle();
+
                 dateEnd.setText(recycle.CalculateDate(startDate, serviceTime));
             }
         }
     };
 
     // tuan
+
+
     public void getSelectedItem(String petName, String startDate, String endDate,
                                 String payment, String address, String note, float totalPrice) {
-        Booking booking;
-        ArrayList<Pet> petList = new ArrayList<>();
-        reference.child("Pets").addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                for (DataSnapshot petSnapshot : snapshot.getChildren()) {
-                    Pet pet = petSnapshot.getValue(Pet.class);
-                    petList.add(pet);
+
+            reference.child("Pets").orderByChild("petName").equalTo(petName).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    long idPet = 0;
+                    if(snapshot.exists()){
+                        for (DataSnapshot pets:snapshot.getChildren()){
+                            idPet = pets.getValue(Pet.class).getPetId();
+                        }
+                    }
+                    Booking booking = new Booking(recycle.idHashcode(petName),
+                            startDate, endDate, address,
+                            note, totalPrice, payment, idPet, getCheckedService());
+                    openDialog(Gravity.BOTTOM, booking, petName);
+                    System.out.println("pet id: "+ idPet);
                 }
-            }
 
-            @Override
-            public void onCancelled(@NonNull DatabaseError error) {
-            }
-        });
-        long petId = 0;
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
 
-        for (Pet pet : petList) {
-            if (pet.getPetName().equals(petName))
-                petId = pet.getPetId();
-        }
-        booking = new Booking(recycle.idHashcode(petName),
-                startDate, endDate, address,
-                note, totalPrice, payment, petId, getCheckedService());
-        openDialog(Gravity.BOTTOM, booking, petName);
+                }
+            });
+
+
     }
 
     private List<String> getListPetName() {
@@ -308,7 +313,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 for (DataSnapshot petSnapshot : snapshot.getChildren()) {
-                    if(currentUser.getUid().equals(petSnapshot.getValue(Pet.class).getUserId())) {
+                    if (petSnapshot.child("userId").getValue(String.class).equals(currentUser.getUid())) {
                         petNameList.add(petSnapshot.child("petName").getValue(String.class));
                     }
                 }
@@ -328,6 +333,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         //Intent pass data
         System.out.println(idButton);
         category = idButton + " Services";
+        nameService.setText(category);
         listCategory.add(category);
 
         List<Service> serviceList = new ArrayList<Service>();
@@ -343,13 +349,13 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
                             @Override
                             public void onDataChange(@NonNull DataSnapshot snapshotService) {
                                 serviceList.clear();
-                                snapshotService.getChildren().forEach(services ->{
-                                    Service selectedService = services.getValue(Service.class);
-                                    if(Long.valueOf(selectedService.getCategoryId()) == id) {
-                                        serviceList.add(selectedService);
+                                snapshotService.getChildren().forEach(services -> {
+                                    if (services.getValue(Service.class).getCategoryId() == id) {
+                                        serviceList.add(services.getValue(Service.class));
                                     }
                                 });
                             }
+
                             @Override
                             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -358,6 +364,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
                     }
                 });
             }
+
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
 
@@ -405,14 +412,13 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         petName_Details.setText(petName);
         startTimeTxt.setText(booking.getBookingStartDate());
         endTimeTxt.setText(booking.getBookingEndDate());
-        totalPrice.setText(booking.getTotalPrice()+"$");
+        totalPrice.setText(booking.getTotalPrice() + "$");
 
         ListView listView = dialog.findViewById(R.id.listViewService);
         BookingDialogAdapter bookingDialogAdapter = new BookingDialogAdapter(dialog.getContext(),
-
                 getCheckedService());
         listView.setAdapter(bookingDialogAdapter);
-
+        //qr code
         MultiFormatWriter writer = new MultiFormatWriter();
         try {
             BitMatrix matrix = writer.encode(booking.getBookingId(), BarcodeFormat.QR_CODE, 600, 600);
@@ -424,7 +430,7 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         }
 
         Button btnCancel = dialog.findViewById(R.id.btnCancelDialog);
-        Button btnSend = dialog.findViewById(R.id.btnSend);
+        Button btnSend = dialog.findViewById(R.id.btnBooking);
 
         //Toast.makeText(this, "Dialog info:" + getCheckedService().get(1), Toast.LENGTH_SHORT).show();
         btnCancel.setOnClickListener(new View.OnClickListener() {
@@ -436,10 +442,11 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
         btnSend.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                reference.child("Booking").child(booking.getBookingId()).setValue(booking);
+                reference.child("Bookings").child(booking.getBookingId()).setValue(booking);
+
                 List<BookingDetail> bookingDetail = new ArrayList<>();
-                for (Service service: getCheckedService()) {
-                    bookingDetail.add(new BookingDetail(booking.getBookingId(),service.getServiceId()));
+                for (Service service : getCheckedService()) {
+                    bookingDetail.add(new BookingDetail(booking.getBookingId(), service.getServiceId()));
                 }
                 reference.child("BookingDetails").setValue(bookingDetail, new DatabaseReference.CompletionListener() {
                     @Override
@@ -448,11 +455,13 @@ public class BookingActivity extends AppCompatActivity implements AdapterView.On
                     }
                 });
                 //reference.child("Booking").child(booking.getBookingId()).child("Selected Services").setValue(booking.getSelectedService());
+                startActivity(new Intent(getApplicationContext(), MainActivity.class));
                 Toast.makeText(getApplicationContext(), "Booking Successfully", Toast.LENGTH_LONG).show();
             }
         });
         dialog.show();
     }
+
     @Override
     public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
 

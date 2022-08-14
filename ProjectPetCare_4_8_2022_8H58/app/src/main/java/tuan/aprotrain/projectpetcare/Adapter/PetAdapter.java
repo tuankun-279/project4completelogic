@@ -20,6 +20,7 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -181,34 +182,34 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
             @Override
             public void onClick(View view) {
                 // tuan
-                sendRequest(pet);
+                String title = pet.getPetName() + " owner send you a breeding request";
+                String message = "Species: " + pet.getSpecies() + "Breed: " + pet.getKind() + "Gender: " + pet.getGender() +
+                        "Color: " + pet.getColor();
+                sendRequest(pet, title, message);
             }
         });
         dialog.show();
     }
 
     // tuan
-    public void sendRequest(Pet pet){
+    public void sendRequest(Pet pet, String title, String message) {
         DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
-        String title = pet.getPetName()+" owner send you a breeding request";
-        String message = "Species: "+pet.getSpecies()+"Breed: "+pet.getKind()+"Gender: " + pet.getGender() +
-                "Color: " + pet.getColor();
+
         reference.child("Users").orderByChild("userId").equalTo(pet.getUserId()).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                if (snapshot.exists()){
+                if (snapshot.exists()) {
                     reference.child("Users").child(pet.getUserId()).child("token").
                             addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot snapshot) {
                                     for (DataSnapshot userToken : snapshot.getChildren()) {
-                                        System.out.println("user token: " + userToken.getValue());
                                         String token = userToken.getValue(String.class);
-
                                         try {
                                             FCMSend.pushNotification(parentContext,
                                                     token,
                                                     title, message);
+                                            receiveDialog(Gravity.CENTER, pet, FirebaseAuth.getInstance().getCurrentUser().getUid());
                                             Toast.makeText(parentContext, "Request sent", Toast.LENGTH_LONG).show();
 
                                         } catch (JSONException e) {
@@ -222,8 +223,7 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
                                 }
                             });
-                }
-                else
+                } else
                     System.out.println("Error: no user");
             }
 
@@ -232,10 +232,89 @@ public class PetAdapter extends RecyclerView.Adapter<PetAdapter.PetViewHolder> {
 
             }
         });
-
-
-
     }
 
+    public void receiveDialog(int gravity, Pet pet, String uId) {
+        final Dialog dialog = new Dialog(parentContext.getApplicationContext());
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE);
 
+        dialog.setContentView(R.layout.layout_receive_dialog);
+
+        Window window = dialog.getWindow();
+        if (window == null) {
+            return;
+        }
+        window.setLayout(WindowManager.LayoutParams.MATCH_PARENT, WindowManager.LayoutParams.WRAP_CONTENT);
+        window.setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+
+        WindowManager.LayoutParams windowAttributes = window.getAttributes();
+        windowAttributes.gravity = gravity;
+        window.setAttributes(windowAttributes);
+
+        ImageView imgPetAvatar = dialog.findViewById(R.id.imgPetAvatar);
+
+        TextView pet_name = dialog.findViewById(R.id.pet_name);
+        TextView pet_gender = dialog.findViewById(R.id.pet_gender);
+        TextView pet_breed = dialog.findViewById(R.id.pet_breed);
+        TextView pet_species = dialog.findViewById(R.id.pet_species);
+        TextView pet_color = dialog.findViewById(R.id.pet_color);
+
+        Button btn_deni = dialog.findViewById(R.id.btn_deni);
+        Button btn_accept = dialog.findViewById(R.id.btn_accept);
+
+        pet_name.setText(pet.getPetName());
+        pet_gender.setText(pet.getGender());
+        pet_breed.setText(pet.getKind());
+        pet_species.setText(pet.getSpecies());
+        pet_color.setText(pet.getColor());
+
+        btn_deni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = pet.getPetName() + " owner denied your breeding request";
+                String message = "Species: " + pet.getSpecies() + "Breed: " + pet.getKind() + "Gender: " + pet.getGender() +
+                        "Color: " + pet.getColor();
+                requestAction(title, message, uId);
+            }
+        });
+
+        btn_deni.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                String title = pet.getPetName() + " owner accepted your breeding request";
+                String message = "Species: " + pet.getSpecies() + "Breed: " + pet.getKind() + "Gender: " + pet.getGender() +
+                        "Color: " + pet.getColor();
+                requestAction(title, message, uId);
+            }
+        });
+    }
+
+    public void requestAction(String title, String message, String uId) {
+        DatabaseReference reference = FirebaseDatabase.getInstance().getReference();
+
+        reference.child("Users").child(uId).child("token").
+                addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+                        for (DataSnapshot userToken : snapshot.getChildren()) {
+                            String token = userToken.getValue(String.class);
+                            try {
+                                FCMSend.pushNotification(parentContext,
+                                        token,
+                                        title, message);
+
+                                Toast.makeText(parentContext, "Request sent", Toast.LENGTH_LONG).show();
+
+                            } catch (JSONException e) {
+                                e.printStackTrace();
+                            }
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(@NonNull DatabaseError error) {
+
+                    }
+                });
+    }
 }

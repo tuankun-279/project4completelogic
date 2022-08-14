@@ -52,6 +52,7 @@
             android:layout_width="match_parent"
             android:layout_height="150dp"
             android:layout_marginBottom="5dp"
+            android:padding="10dp"
             android:background="#757575">
 
         </ListView>
@@ -109,13 +110,13 @@
                 android:background="@drawable/bg_grey_corner_10"
                 android:text="No, Thank you"/>
             <Button
-                android:id="@+id/btnSend"
+                android:id="@+id/btnBooking"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:textSize="14sp"
                 android:background="@drawable/bg_yellow_corner_10"
-                android:text="Send"/>
+                android:text="Booking"/>
         </LinearLayout>
     </LinearLayout>
 

@@ -49,6 +49,9 @@ public class Booking implements Serializable {
         this.notes = note;
     }
 
+    public Booking() {
+
+    }
 
 
     public String getBookingId() {

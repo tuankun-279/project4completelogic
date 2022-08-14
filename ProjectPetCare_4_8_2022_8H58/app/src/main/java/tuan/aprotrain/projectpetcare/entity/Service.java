@@ -1,20 +1,17 @@
 package tuan.aprotrain.projectpetcare.entity;
 
-import java.sql.Time;
-import java.util.HashMap;
-
 public class Service {
 
     private long serviceId;
     private String serviceName;
-    private String categoryId;
+    private long categoryId;
     private Float servicePrice;//sua thanh servicePrice
     private long serviceTime;//Them serviceTime
     public static String TABLE_NAME = "Services";//them table name
 
     public Service(){}
 
-    public Service(long serviceId, String serviceName, String categoryId, Float servicePrice, long serviceTime) {
+    public Service(long serviceId, String serviceName, Long categoryId, Float servicePrice, long serviceTime) {
         this.serviceId = serviceId;
         this.serviceName = serviceName;
         this.categoryId = categoryId;
@@ -47,11 +44,11 @@ public class Service {
         this.serviceName = serviceName;
     }
 
-    public String getCategoryId() {
+    public long getCategoryId() {
         return categoryId;
     }
 
-    public void setCategoryId(String categoryId) {
+    public void setCategoryId(long categoryId) {
         this.categoryId = categoryId;
     }
 

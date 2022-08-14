@@ -5,7 +5,6 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.BaseAdapter;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -22,7 +21,7 @@ public class BookingDialogAdapter extends ArrayAdapter<Service> {
     LayoutInflater inflater;
 
     public BookingDialogAdapter(Context context, ArrayList<Service> serviceArrayList){
-        super(context,R.layout.booking_list_item,R.id.idDialog,serviceArrayList);
+        super(context,R.layout.booking_services_item,R.id.idDialog,serviceArrayList);
     }
 
 
@@ -32,7 +31,7 @@ public class BookingDialogAdapter extends ArrayAdapter<Service> {
         Service service = (Service) getItem(position);
         if(convertView == null){
             convertView = LayoutInflater.from(getContext())
-                    .inflate(R.layout.booking_list_item,parent,false);
+                    .inflate(R.layout.booking_services_item,parent,false);
         }
 
         TextView  selectedServiceName = convertView.findViewById(R.id.selectedServiceName);
